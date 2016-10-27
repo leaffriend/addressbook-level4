@@ -33,7 +33,7 @@
 > * Words in `UPPER_CASE` are the parameters.
 > * Items in `SQUARE_BRACKETS` are optional.
 > * Items with `...` after them can have multiple instances.
-> * The order of parameters is fixed.
+> * Parameters can be in any order.
 
 #### Viewing help : `help`
 Format: `help`
@@ -48,7 +48,7 @@ Format: `add NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...`
 
 Examples: 
 * `add John Doe p/98765432 e/johnd@gmail.com a/John street, block 123, #01-01`
-* `add Betsy Crowe p/1234567 e/betsycrowe@gmail.com a/Newgate Prison t/criminal t/friend`
+* `add Betsy Crowe t/friend e/betsycrowe@gmail.com a/Newgate Prison p/1234567 t/criminal`
 
 #### Listing all persons : `list`
 Shows a list of all persons in the address book.<br>
@@ -123,12 +123,24 @@ There is no need to save manually.
        
 ## Command Summary
 
-Command | Format  
--------- | :-------- 
-Add | `add NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...`
-Clear | `clear`
-Delete | `delete INDEX`
-Find | `find KEYWORD [MORE_KEYWORDS]`
-List | `list`
-Help | `help`
-Select | `select INDEX`
+* **Add**  `add NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` <br>
+  e.g. `add James Ho p/22224444 e/jamesho@gmail.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+
+* **Clear** : `clear`
+  
+* **Delete** : `delete INDEX` <br> 
+   e.g. `delete 3`
+  
+* **Find** : `find KEYWORD [MORE_KEYWORDS]` <br>
+  e.g. `find James Jake`
+  
+* **List** : `list` <br>
+  e.g.
+  
+* **Help** : `help` <br>
+  e.g.
+  
+* **Select** : `select INDEX` <br>
+  e.g.`select 2`
+  
+

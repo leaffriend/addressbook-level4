@@ -28,10 +28,6 @@ public class PersonListPanel extends UiPart {
     @FXML
     private ListView<ReadOnlyPerson> personListView;
 
-    public PersonListPanel() {
-        super();
-    }
-
     @Override
     public void setNode(Node node) {
         panel = (VBox) node;
@@ -72,12 +68,13 @@ public class PersonListPanel extends UiPart {
     }
 
     private void setEventHandlerForSelectionChangeEvent() {
-        personListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                logger.fine("Selection in person list panel changed to : '" + newValue + "'");
-                raise(new PersonPanelSelectionChangedEvent(newValue));
-            }
-        });
+        personListView.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        logger.fine("Selection in person list panel changed to : '" + newValue + "'");
+                        raise(new PersonPanelSelectionChangedEvent(newValue));
+                    }
+                });
     }
 
     public void scrollTo(int index) {
@@ -88,9 +85,6 @@ public class PersonListPanel extends UiPart {
     }
 
     class PersonListViewCell extends ListCell<ReadOnlyPerson> {
-
-        public PersonListViewCell() {
-        }
 
         @Override
         protected void updateItem(ReadOnlyPerson person, boolean empty) {

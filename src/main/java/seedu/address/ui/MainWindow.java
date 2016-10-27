@@ -23,8 +23,8 @@ public class MainWindow extends UiPart {
 
     private static final String ICON = "/images/address_book_32.png";
     private static final String FXML = "MainWindow.fxml";
-    public static final int MIN_HEIGHT = 600;
-    public static final int MIN_WIDTH = 450;
+    private static final int MIN_HEIGHT = 600;
+    private static final int MIN_WIDTH = 450;
 
     private Logic logic;
 
@@ -39,7 +39,6 @@ public class MainWindow extends UiPart {
 
     // Handles to elements of this Ui container
     private VBox rootLayout;
-    private Scene scene;
 
     private String addressBookName;
 
@@ -61,11 +60,6 @@ public class MainWindow extends UiPart {
     @FXML
     private AnchorPane statusbarPlaceholder;
 
-
-    public MainWindow() {
-        super();
-    }
-
     @Override
     public void setNode(Node node) {
         rootLayout = (VBox) node;
@@ -77,7 +71,6 @@ public class MainWindow extends UiPart {
     }
 
     public static MainWindow load(Stage primaryStage, Config config, UserPrefs prefs, Logic logic) {
-
         MainWindow mainWindow = UiPartLoader.loadUiPart(primaryStage, new MainWindow());
         mainWindow.configure(config.getAppTitle(), config.getAddressBookName(), config, prefs, logic);
         return mainWindow;
@@ -86,18 +79,18 @@ public class MainWindow extends UiPart {
     private void configure(String appTitle, String addressBookName, Config config, UserPrefs prefs,
                            Logic logic) {
 
-        //Set dependencies
+        // Set dependencies
         this.logic = logic;
         this.addressBookName = addressBookName;
         this.config = config;
         this.userPrefs = prefs;
 
-        //Configure the UI
+        // Configure the UI
         setTitle(appTitle);
         setIcon(ICON);
         setWindowMinSize();
         setWindowDefaultSize(prefs);
-        scene = new Scene(rootLayout);
+        Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
 
         setAccelerators();
@@ -111,8 +104,9 @@ public class MainWindow extends UiPart {
         browserPanel = BrowserPanel.load(browserPlaceholder);
         personListPanel = PersonListPanel.load(primaryStage, getPersonListPlaceholder(), logic.getFilteredPersonList());
         resultDisplay = ResultDisplay.load(primaryStage, getResultDisplayPlaceholder());
-        statusBarFooter = StatusBarFooter.load(primaryStage, getStatusbarPlaceholder(), config.getAddressBookFilePath());
-        commandBox = CommandBox.load(primaryStage, getCommandBoxPlaceholder(), resultDisplay, logic);
+        statusBarFooter = StatusBarFooter.load(primaryStage, getStatusbarPlaceholder(),
+                                               config.getAddressBookFilePath());
+        commandBox = CommandBox.load(primaryStage, getCommandBoxPlaceholder(), logic);
     }
 
     private AnchorPane getCommandBoxPlaceholder() {
@@ -127,11 +121,11 @@ public class MainWindow extends UiPart {
         return resultDisplayPlaceholder;
     }
 
-    public AnchorPane getPersonListPlaceholder() {
+    private AnchorPane getPersonListPlaceholder() {
         return personListPanelPlaceholder;
     }
 
-    public void hide() {
+    void hide() {
         primaryStage.hide();
     }
 
@@ -142,7 +136,7 @@ public class MainWindow extends UiPart {
     /**
      * Sets the default size based on user preferences.
      */
-    protected void setWindowDefaultSize(UserPrefs prefs) {
+    private void setWindowDefaultSize(UserPrefs prefs) {
         primaryStage.setHeight(prefs.getGuiSettings().getWindowHeight());
         primaryStage.setWidth(prefs.getGuiSettings().getWindowWidth());
         if (prefs.getGuiSettings().getWindowCoordinates() != null) {
@@ -159,7 +153,7 @@ public class MainWindow extends UiPart {
     /**
      * Returns the current size and the position of the main Window.
      */
-    public GuiSettings getCurrentGuiSetting() {
+    GuiSettings getCurrentGuiSetting() {
         return new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
                 (int) primaryStage.getX(), (int) primaryStage.getY());
     }
@@ -170,7 +164,7 @@ public class MainWindow extends UiPart {
         helpWindow.show();
     }
 
-    public void show() {
+    void show() {
         primaryStage.show();
     }
 
@@ -186,11 +180,12 @@ public class MainWindow extends UiPart {
         return this.personListPanel;
     }
 
-    public void loadPersonPage(ReadOnlyPerson person) {
+    void loadPersonPage(ReadOnlyPerson person) {
         browserPanel.loadPersonPage(person);
     }
 
-    public void releaseResources() {
+    void releaseResources() {
         browserPanel.freeResources();
     }
+
 }

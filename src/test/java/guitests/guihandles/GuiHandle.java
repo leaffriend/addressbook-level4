@@ -10,6 +10,7 @@ import javafx.stage.Window;
 import seedu.address.TestApp;
 import seedu.address.commons.core.LogsCenter;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -18,6 +19,10 @@ import java.util.logging.Logger;
 public class GuiHandle {
     protected final GuiRobot guiRobot;
     protected final Stage primaryStage;
+    /**
+     * An optional stage that exists in the App other than the primaryStage, could be a alert dialog, popup window, etc.
+     */
+    protected Optional<Stage> intermediateStage = Optional.empty();
     protected final String stageTitle;
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
@@ -31,7 +36,7 @@ public class GuiHandle {
 
     public void focusOnWindow(String stageTitle) {
         logger.info("Focusing " + stageTitle);
-        java.util.Optional<Window> window = guiRobot.listTargetWindows()
+        Optional<Window> window = guiRobot.listTargetWindows()
                 .stream()
                 .filter(w -> w instanceof Stage && ((Stage) w).getTitle().equals(stageTitle)).findAny();
 
@@ -39,7 +44,7 @@ public class GuiHandle {
             logger.warning("Can't find stage " + stageTitle + ", Therefore, aborting focusing");
             return;
         }
-
+        intermediateStage = Optional.ofNullable((Stage) window.get());
         guiRobot.targetWindow(window.get());
         guiRobot.interact(() -> window.get().requestFocus());
         logger.info("Finishing focus " + stageTitle);
@@ -55,7 +60,7 @@ public class GuiHandle {
 
     protected void setTextField(String textFieldId, String newText) {
         guiRobot.clickOn(textFieldId);
-        ((TextField)guiRobot.lookup(textFieldId).tryQuery().get()).setText(newText);
+        ((TextField) guiRobot.lookup(textFieldId).tryQuery().get()).setText(newText);
         guiRobot.sleep(500); // so that the texts stays visible on the GUI for a short period
     }
 
@@ -65,6 +70,10 @@ public class GuiHandle {
 
     protected String getTextFromLabel(String fieldId, Node parentNode) {
         return ((Label) guiRobot.from(parentNode).lookup(fieldId).tryQuery().get()).getText();
+    }
+
+    protected String getTextFromLabel(String fieldId) {
+        return ((Label) guiRobot.lookup(fieldId).tryQuery().get()).getText();
     }
 
     public void focusOnSelf() {
@@ -78,7 +87,7 @@ public class GuiHandle {
     }
 
     public void closeWindow() {
-        java.util.Optional<Window> window = guiRobot.listTargetWindows()
+        Optional<Window> window = guiRobot.listTargetWindows()
                 .stream()
                 .filter(w -> w instanceof Stage && ((Stage) w).getTitle().equals(stageTitle)).findAny();
 
@@ -87,7 +96,7 @@ public class GuiHandle {
         }
 
         guiRobot.targetWindow(window.get());
-        guiRobot.interact(() -> ((Stage)window.get()).close());
+        guiRobot.interact(() -> ((Stage) window.get()).close());
         focusOnMainApp();
     }
 }
